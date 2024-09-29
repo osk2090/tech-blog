@@ -4,8 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -168,5 +167,68 @@ public class MapTests {
         System.out.println("Finished without exception");
 
 
+    }
+
+    @Test
+    void vsMapTest() {
+        // TreeSet 예제
+        Set<String> treeSet = new TreeSet<>();
+        treeSet.add("Banana");
+        treeSet.add("Apple");
+        treeSet.add("Cherry");
+        treeSet.add("Date");
+        treeSet.add("Apple"); // 중복 원소
+
+        System.out.println("TreeSet:");
+        for (String fruit : treeSet) {
+            System.out.println(fruit);
+        }
+
+        // HashSet 예제
+        Set<String> hashSet = new HashSet<>();
+        hashSet.add("Banana");
+        hashSet.add("Apple");
+        hashSet.add("Cherry");
+        hashSet.add("Date");
+        hashSet.add("Apple"); // 중복 원소
+
+        System.out.println("\nHashSet:");
+        for (String fruit : hashSet) {
+            System.out.println(fruit);
+        }
+
+        // 성능 비교
+        int numElements = 100000;
+        long startTime, endTime;
+
+        // TreeSet 삽입 시간
+        Set<Integer> largeTreeSet = new TreeSet<>();
+        startTime = System.nanoTime();
+        for (int i = 0; i < numElements; i++) {
+            largeTreeSet.add(i);
+        }
+        endTime = System.nanoTime();
+        System.out.println("\nTreeSet 삽입 시간: " + (endTime - startTime) / 1000000.0 + " ms");
+
+        // HashSet 삽입 시간
+        Set<Integer> largeHashSet = new HashSet<>();
+        startTime = System.nanoTime();
+        for (int i = 0; i < numElements; i++) {
+            largeHashSet.add(i);
+        }
+        endTime = System.nanoTime();
+        System.out.println("HashSet 삽입 시간: " + (endTime - startTime) / 1000000.0 + " ms");
+
+        // TreeSet 검색 시간
+        startTime = System.nanoTime();
+        largeTreeSet.contains(numElements / 2);
+        endTime = System.nanoTime();
+        System.out.println("TreeSet 검색 시간: " + (endTime - startTime) / 1000.0 + " μs");
+
+        // HashSet 검색 시간
+        startTime = System.nanoTime();
+        largeHashSet.contains(numElements / 2);
+        endTime = System.nanoTime();
+        System.out.println("HashSet 검색 시간: " + (endTime - startTime) / 1000.0 + " μs");
     }
 }
