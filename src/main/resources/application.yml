@@ -2,6 +2,12 @@ spring:
   application:
     name: blog
 
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: myuser
+    password: mypassword
+    driver-class-name: org.postgresql.Driver
+
 logging:
   level:
     root: info
