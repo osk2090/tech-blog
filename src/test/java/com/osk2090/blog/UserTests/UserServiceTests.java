@@ -15,8 +15,11 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.UncategorizedSQLException;
 import org.springframework.jdbc.support.SQLErrorCodeSQLExceptionTranslator;
 import org.springframework.jdbc.support.SQLExceptionTranslator;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import javax.sql.DataSource;
@@ -28,6 +31,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
+@Transactional
+@Rollback(value = false)
 public class UserServiceTests {
     @Autowired
     UserServiceImpl userServiceImpl;
@@ -251,5 +256,56 @@ public class UserServiceTests {
             // 결국엔 원상태로 돌아갔는지 확인하는 로직
             assertThat(userDao.getCount()).isEqualTo(0);
         }
+
+        @Test
+        public void transactionSyncRollback() {
+            DefaultTransactionDefinition txDefinition = new DefaultTransactionDefinition();
+            TransactionStatus txStatus = transactionManager.getTransaction(txDefinition);
+
+            try {
+                // 한개의 트랜잭션 안에서 동작할수 있도록 보장해준다.
+                userServiceImpl.deleteAll();
+                userServiceImpl.add(users.get(0));
+                userServiceImpl.add(users.get(1));
+            } finally {
+                // 무조건 rollback 해준다.
+                transactionManager.rollback(txStatus);
+            }
+        }
+    }
+
+    @Test
+    @Transactional()
+    // readonly 옵션을 주면 밑에 코드에서 삭제 쿼리를 날리려고 하기 때문에 예외가 발생
+    public void transactionSyncByTransactionAnnotation() {
+        // 하지만 테스트 환경에서의 트랜잭션은 무조건 자동롤백해준다.
+
+        userServiceImpl.deleteAll();
+        userServiceImpl.add(users.get(0));
+        userServiceImpl.add(users.get(1));
+    }
+
+    @Test
+    @Transactional()
+    // 롤백 어노테이션은 메서드 타입에서만 사용가능
+    @Rollback(value = false) // 해당 어노테이션을 달면 테스트 환경에서의 트랜잭션의 자동롤백이 비활성화 되서 디비에 데이터가 쌓인다.
+    public void transactionSyncByTransactionAnnotationAndRollback() {
+        userServiceImpl.deleteAll();
+        userServiceImpl.add(users.get(0));
+        userServiceImpl.add(users.get(1));
+    }
+
+    @Test
+    @Transactional()
+    @Rollback(value = true) // 이렇게 하면 클래스 단위의 롤백 옵션은 무시되고 메서드에 선언된 롤백 옵션을 띠르게 된다.
+    public void add() {
+        userServiceImpl.deleteAll();
+        userServiceImpl.add(users.get(0));
+    }
+
+    // 이렇게 하면 트랜잭션을 비활성화 한다.
+    @Transactional(propagation = Propagation.NEVER)
+    public void notTransaction() {
+
     }
 }
