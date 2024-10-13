@@ -294,7 +294,6 @@ public class UserServiceTests {
         userServiceImpl.add(users.get(0));
         userServiceImpl.add(users.get(1));
     }
-
     @Test
     @Transactional()
     @Rollback(value = true) // 이렇게 하면 클래스 단위의 롤백 옵션은 무시되고 메서드에 선언된 롤백 옵션을 띠르게 된다.

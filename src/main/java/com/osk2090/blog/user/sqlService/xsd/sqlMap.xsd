@@ -15,7 +15,7 @@
     <complexType name="sqlType">
         <simpleContent>
             <extension base="string">
-                <attribute name="key " use="required" type="string" />
+                <attribute name="key" use="required" type="string" />
             </extension>
         </simpleContent>
     </complexType>

@@ -4,6 +4,7 @@ import com.osk2090.blog.user.domain.Level;
 import com.osk2090.blog.user.domain.User;
 import com.osk2090.blog.user.sqlService.SqlService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
@@ -13,11 +14,15 @@ import java.sql.SQLException;
 import java.util.List;
 
 @Component
-@RequiredArgsConstructor
 public class UserDaoJdbc implements UserDao {
 
     private final JdbcTemplate jdbcTemplate;
     private final SqlService sqlService;
+
+    public UserDaoJdbc(JdbcTemplate jdbcTemplate, @Qualifier("baseSqlService") SqlService sqlService) {
+        this.jdbcTemplate = jdbcTemplate;
+        this.sqlService = sqlService;
+    }
 
     private RowMapper<User> userMapper =
             new RowMapper<User>() {

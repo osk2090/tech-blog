@@ -2,6 +2,12 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.3.1'
     id 'io.spring.dependency-management' version '1.1.5'
+    id("com.github.bjornvester.xjc") version "1.8.1"
+}
+
+xjc {
+    xsdDir.set(layout.projectDirectory.dir("src/main/java/com/osk2090/blog/user/sqlService/xsd"))
+    outputJavaDir.set(layout.projectDirectory.dir("src/main/java/com/osk2090/blog/user/sqlService/jaxb"))
 }
 
 group = 'com.osk2090'
@@ -33,6 +39,16 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    // https://mvnrepository.com/artifact/org.springframework/spring-oxm
+    implementation group: 'org.springframework', name: 'spring-oxm', version: '6.1.13'
+
+    // https://mvnrepository.com/artifact/com.github.bjornvester.xjc/com.github.bjornvester.xjc.gradle.plugin
+    implementation group: 'com.github.bjornvester.xjc', name: 'com.github.bjornvester.xjc.gradle.plugin', version: '1.6.0', ext: 'pom'
+
+    // https://mvnrepository.com/artifact/jakarta.xml.bind/jakarta.xml.bind-api
+    implementation group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '4.0.2'
+    // https://mvnrepository.com/artifact/com.sun.xml.bind/jaxb-impl
+    implementation group: 'com.sun.xml.bind', name: 'jaxb-impl', version: '4.0.5'
 
     implementation 'javax.xml.bind:jaxb-api:2.3.1'
     implementation 'org.glassfish.jaxb:jaxb-runtime:2.3.1'

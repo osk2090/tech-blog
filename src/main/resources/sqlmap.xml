@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sqlmap xmlns="http://www.epril.com/sqlmap">
+    <sql key="add">INSERT INTO ...</sql>
+    <sql key="get">SELECT ...</sql>
+    <sql key="delete">DELETE ...</sql>
+</sqlmap>
