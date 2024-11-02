@@ -2,19 +2,19 @@ package com.osk2090.blog.user.sqlService;
 
 import jakarta.annotation.PostConstruct;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 @Setter
 @Component
 public class BaseSqlService implements SqlService {
-    protected SqlReader sqlReader;
-    protected SqlRegistry sqlRegistry;
-
-    public BaseSqlService(@Qualifier("jaxbXmlSqlReader") SqlReader sqlReader, @Qualifier("hashMapSqlRegistry") SqlRegistry sqlRegistry) {
-        this.sqlReader = sqlReader;
-        this.sqlRegistry = sqlRegistry;
-    }
+    @Autowired
+    @Qualifier("jaxbXmlSqlReader")
+    private SqlReader sqlReader;
+    @Autowired
+    @Qualifier("hashMapSqlRegistry")
+    private SqlRegistry sqlRegistry;
 
     @PostConstruct
     public void loadSql() {
