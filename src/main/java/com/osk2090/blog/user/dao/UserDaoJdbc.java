@@ -4,12 +4,10 @@ import com.osk2090.blog.user.domain.Level;
 import com.osk2090.blog.user.domain.User;
 import com.osk2090.blog.user.sqlService.SqlService;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
-import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
